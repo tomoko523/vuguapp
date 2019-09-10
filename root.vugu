@@ -1,0 +1,9 @@
+<div class="root">
+    <random-animal target="dog" url="https://random.dog/woof.json">
+</div>
+
+<style>
+</style>
+
+<script type="application/x-go">
+</script>

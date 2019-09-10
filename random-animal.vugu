@@ -1,0 +1,79 @@
+<div class="random-animal">
+    <div vg-if='data.IsLoading'>Loading...</div>
+    <div vg-if='len(data.Animal.Url) > 0'>
+        <p>今日の動物</p>
+        <p vg-html='data.Animal.Url'></p>
+        <img vg-if='data.ContentType == "image"' :src='data.Animal.Url'>
+        <video controls vg-if='data.ContentType == "video"' :src='data.Animal.Url'>
+    </div>
+    <button @click="data.HandleClick(event)">
+        <span vg-html='data.Target'></span>げっと
+    </button>
+</div>
+
+<style>
+    img, video {
+        width: 350px;
+    }
+</style>
+
+<script type="application/x-go">
+import "encoding/json"
+import "net/http"
+import "log"
+import "path/filepath"
+
+type RandomAnimalData struct {
+    Animal      Animal
+    ContentType string
+    IsLoading   bool
+    Target      string
+    Url         string
+}
+
+type Animal struct {
+    Url string `json:"url"`
+}
+
+func (comp *RandomAnimal) NewData(props vugu.Props) (interface{}, error) { 
+  ret := &RandomAnimalData{}
+  ret.Target, _ = props["target"].(string)
+  ret.Url, _ = props["url"].(string)
+  return ret, nil
+}
+
+func (data *RandomAnimalData) HandleClick(event *vugu.DOMEvent) {
+    ee := event.EventEnv()
+    go func() {
+        ee.Lock()
+        data.IsLoading = true
+        ee.UnlockRender()
+        res, err := http.Get(data.Url)
+        if err != nil {
+            log.Printf("Error fetch()ing: %v", err)
+            return
+        }
+        defer res.Body.Close()
+
+        var a Animal
+        err = json.NewDecoder(res.Body).Decode(&a)
+        if err != nil {
+            log.Printf("Error JSON decoding: %v", err)
+            return
+        }
+
+        ee.Lock()
+        defer ee.UnlockRender()
+        data.Animal = a
+        e := filepath.Ext(data.Animal.Url)
+        log.Printf("extention: %v", e)
+        switch e {
+            case ".jpeg", ".png", ".jpg", ".JPG":
+                data.ContentType = "image"
+            case ".mp4", ".gif":
+                data.ContentType = "video"
+        }
+        data.IsLoading = false
+    }()
+}
+</script>
