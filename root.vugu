@@ -1,9 +1,16 @@
 <div class="root">
-    <random-animal target="dog" url="https://random.dog/woof.json">
+    <random-animal target="わんこ" :url='data.Url'>
 </div>
 
 <style>
 </style>
 
 <script type="application/x-go">
+type RootData struct {
+    Url string
+}
+func (comp *Root) NewData(props vugu.Props) (interface{}, error) {
+	url := "https://random.dog/woof.json"
+	return &RootData{Url: url}, nil
+}
 </script>

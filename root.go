@@ -6,6 +6,15 @@ import "fmt"
 import "reflect"
 import "github.com/vugu/vugu"
 
+type RootData struct {
+	Url string
+}
+
+func (comp *Root) NewData(props vugu.Props) (interface{}, error) {
+	url := "https://random.dog/woof.json"
+	return &RootData{Url: url}, nil
+}
+
 var _ vugu.ComponentType = (*Root)(nil)
 
 func (comp *Root) BuildVDOM(dataI interface{}) (vdom *vugu.VGNode, css *vugu.VGNode, reterr error) {
@@ -24,8 +33,11 @@ func (comp *Root) BuildVDOM(dataI interface{}) (vdom *vugu.VGNode, css *vugu.VGN
 		parent := n
 		n = &vugu.VGNode{Type: vugu.VGNodeType(1), Data: "\n    ", DataAtom: vugu.VGAtom(0), Namespace: "", Attr: []vugu.VGAttribute(nil)}
 		parent.AppendChild(n)
-		n = &vugu.VGNode{Type: vugu.VGNodeType(3), Data: "random-animal", DataAtom: vugu.VGAtom(0), Namespace: "", Attr: []vugu.VGAttribute{vugu.VGAttribute{Namespace: "", Key: "target", Val: "dog"}, vugu.VGAttribute{Namespace: "", Key: "url", Val: "https://random.dog/woof.json"}}}
+		n = &vugu.VGNode{Type: vugu.VGNodeType(3), Data: "random-animal", DataAtom: vugu.VGAtom(0), Namespace: "", Attr: []vugu.VGAttribute{vugu.VGAttribute{Namespace: "", Key: "target", Val: "わんこ"}}}
 		parent.AppendChild(n)
+		n.Props = vugu.Props{
+			"url": data.Url,
+		}
 		{
 			parent := n
 			n = &vugu.VGNode{Type: vugu.VGNodeType(1), Data: "\n", DataAtom: vugu.VGAtom(0), Namespace: "", Attr: []vugu.VGAttribute(nil)}
@@ -36,9 +48,5 @@ func (comp *Root) BuildVDOM(dataI interface{}) (vdom *vugu.VGNode, css *vugu.VGN
 }
 
 type Root struct {}
-
-type RootData struct {}
-
-func (ct *Root) NewData(props vugu.Props) (interface{}, error) { return &RootData{}, nil }
 
 func init() { vugu.RegisterComponentType("root", &Root{}) }

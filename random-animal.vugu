@@ -1,8 +1,7 @@
 <div class="random-animal">
+    <div class="message">どんな子がくるかな？</div>
     <div vg-if='data.IsLoading'>Loading...</div>
     <div vg-if='len(data.Animal.Url) > 0'>
-        <p>今日の動物</p>
-        <p vg-html='data.Animal.Url'></p>
         <img vg-if='data.ContentType == "image"' :src='data.Animal.Url'>
         <video controls vg-if='data.ContentType == "video"' :src='data.Animal.Url'>
     </div>
@@ -13,7 +12,29 @@
 
 <style>
     img, video {
-        width: 350px;
+        width: 500px;
+        height: 500px;
+        object-fit: cover;
+        margin: 50px 0;
+    }
+    button {
+        font-size: 5em;
+        font-weight: bold;
+        padding: 10px 30px;
+        background-color: lightsalmon;
+        color: #fff;
+        border-style: none;
+    }
+    button:hover {
+        background-color: darksalmon;
+        color: #fff;
+        cursor: pointer;
+    }
+    .random-animal {
+        text-align: center;
+    }
+    .message {
+        font-size: 4em;
     }
 </style>
 
@@ -66,14 +87,19 @@ func (data *RandomAnimalData) HandleClick(event *vugu.DOMEvent) {
         defer ee.UnlockRender()
         data.Animal = a
         e := filepath.Ext(data.Animal.Url)
-        log.Printf("extention: %v", e)
-        switch e {
-            case ".jpeg", ".png", ".jpg", ".JPG":
-                data.ContentType = "image"
-            case ".mp4", ".gif":
-                data.ContentType = "video"
-        }
+        data.ContentType = getSourceType(e)
         data.IsLoading = false
     }()
+}
+
+func getSourceType(e string) string {
+    switch e {
+        case ".jpeg", ".png", ".jpg", ".JPG":
+            return "image"
+        case ".mp4", ".gif":
+            return "video"
+        default:
+            return "image"
+    }
 }
 </script>
