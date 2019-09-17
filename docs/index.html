@@ -6,15 +6,15 @@
 
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link rel="manifest" href="/vuguapp/manifest.json">
+<link rel="manifest" href="./manifest.json">
 
 <script src="https://cdn.jsdelivr.net/npm/text-encoding@0.7.0/lib/encoding.min.js"></script> 
-<script src="/vuguapp/wasm_exec.js"></script>
+<script src="./wasm_exec.js"></script>
 </head>
 <body>
 <div id="root_mount_parent">
 
-<!-- <img style="position: absolute; top: 50%; left: 50%;" src="https://cdnjs.cloudflare.com/ajax/libs/galleriffic/2.0.1/css/loader.gif"> -->
+<img style="position: absolute; top: 50%; left: 50%;" src="./image/loader.gif">
 
 </div>
 <script>
@@ -27,7 +27,7 @@ if (wasmSupported) {
 		};
 	}
 	const go = new Go();
-	WebAssembly.instantiateStreaming(fetch("/vuguapp/main.wasm"), go.importObject).then((result) => {
+	WebAssembly.instantiateStreaming(fetch("./main.wasm"), go.importObject).then((result) => {
 		go.run(result.instance);
 	});
 } else {
@@ -36,7 +36,7 @@ if (wasmSupported) {
 
 //Service Workerの登録
 if ('serviceWorker' in navigator) {
-	navigator.serviceWorker.register('/vuguapp/sw.js').then((registration) => {
+	navigator.serviceWorker.register('./sw.js').then((registration) => {
 		console.log("sw.js register");
 		if (typeof registration.update == 'function') {
 			registration.update();

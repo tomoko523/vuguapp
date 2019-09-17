@@ -4,6 +4,8 @@ const CACHE_NAME = 'pwa-sample-caches-v1';
 const urlsToCache = [
     '.',
     './manifest.json',
+    './main.wasm',
+    './wasm_exec.js',
     'https://cdn.jsdelivr.net/npm/text-encoding@0.7.0/lib/encoding.min.js',
 ];
 
