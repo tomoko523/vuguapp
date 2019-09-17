@@ -1,13 +1,16 @@
 <div class="random-animal">
     <div class="message">どんな子がくるかな？</div>
-    <div vg-if='data.IsLoading'>Loading...</div>
+    <button @click="data.HandleClick(event)">
+        <span vg-html='data.Target'></span>げっと
+    </button>
+    <div vg-if='data.ClickCount > 0'>
+        <span vg-html='data.ClickCount'></span>回目
+    </div>
+    <div vg-if='data.IsLoading' vg-html>Loading...</div>
     <div vg-if='len(data.Animal.Url) > 0'>
         <img vg-if='data.ContentType == "image"' :src='data.Animal.Url'>
         <video controls vg-if='data.ContentType == "video"' :src='data.Animal.Url'>
     </div>
-    <button @click="data.HandleClick(event)">
-        <span vg-html='data.Target'></span>げっと
-    </button>
 </div>
 
 <style>
@@ -20,6 +23,7 @@
     button {
         font-size: 5em;
         font-weight: bold;
+        margin: 50px 0;
         padding: 10px 30px;
         background-color: lightsalmon;
         color: #fff;
@@ -48,6 +52,7 @@ type RandomAnimalData struct {
     Animal      Animal
     ContentType string
     IsLoading   bool
+    ClickCount  int
     Target      string
     Url         string
 }
@@ -64,6 +69,8 @@ func (comp *RandomAnimal) NewData(props vugu.Props) (interface{}, error) {
 }
 
 func (data *RandomAnimalData) HandleClick(event *vugu.DOMEvent) {
+    data.ClickCount = data.ClickCount + 1
+    data.Animal = Animal{}
     ee := event.EventEnv()
     go func() {
         ee.Lock()

@@ -6,6 +6,8 @@ const urlsToCache = [
     './manifest.json',
     './main.wasm',
     './wasm_exec.js',
+    './image/dog192.png',
+    './image/loader.gif',
     'https://cdn.jsdelivr.net/npm/text-encoding@0.7.0/lib/encoding.min.js',
 ];
 
