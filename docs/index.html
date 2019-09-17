@@ -37,6 +37,7 @@ if (wasmSupported) {
 //Service Workerの登録
 if ('serviceWorker' in navigator) {
 	navigator.serviceWorker.register('/vuguapp/sw.js').then((registration) => {
+		console.log("sw.js register");
 		if (typeof registration.update == 'function') {
 			registration.update();
 		}

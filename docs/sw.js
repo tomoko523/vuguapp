@@ -2,11 +2,11 @@
 const CACHE_NAME = 'pwa-sample-caches-v1';
 // Cache targets
 const urlsToCache = [
-  './',
-  './index.html',
-  './main.wasm',
-  './wasm_exec.js',
-  './image/doc192.png',
+  './vuguapp',
+  './vuguapp/index.html',
+  './vuguapp/main.wasm',
+  './vuguapp/wasm_exec.js',
+  './vuguapp/image/doc192.png',
 ];
 
 self.addEventListener('install', (event) => {
